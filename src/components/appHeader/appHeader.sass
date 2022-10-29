@@ -1,0 +1,40 @@
+@import '../../style/variables'
+    
+a
+    text-decoration: none
+    
+.header
+    margin-top: 30px
+    display: grid
+    grid-template-columns: auto auto
+    &__name
+        h1
+            color: #000000
+            span
+                color: #9F0013
+    &__nav
+        position: relative
+        ul
+            position: absolute
+            margin-top: 25px
+            right: 0px
+            display: flex
+            
+            li
+                display: inline
+                font-size: 24px
+                font-weight: bold
+        &_char
+            transition: margin 0.1s ease-out
+            display: block
+            color: #000000
+            &:hover
+                margin-top: -3px
+                color: $main-color
+        &_comics         
+            transition: margin 0.1s ease-out
+            display: block           
+            color: #000000
+            &:hover
+                margin-top: -3px
+                color: $main-color

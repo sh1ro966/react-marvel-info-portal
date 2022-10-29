@@ -1,0 +1,38 @@
+.hero
+    height: 1014px
+    width: 650px
+    float: left
+    &__container
+        margin-top: 53px
+        display: grid
+        grid-template-columns: repeat(3, 200px)
+        column-gap: 25px
+        row-gap: 30px
+        padding: 0
+    &__item
+        position: relative
+        background-color: #232222
+        width: 200px
+        height: 318px
+        cursor: pointer
+        transition: all 0.1s ease-out
+        &:hover
+            margin-top: -5px
+            box-shadow: 1px 1px 19px 3px rgba(210, 43, 43, 1)
+        p
+            color: #fff
+            text-transform: uppercase
+            font-weight: 400
+            font-size: 22px
+            line-height: 26px
+            margin-top: 18px
+            margin-left: 15px
+        img
+            width: 200px
+            height: 200px
+       
+.button__long
+    display: block
+    margin: 0 auto
+    margin-top: 45px
+    margin-bottom: 45px

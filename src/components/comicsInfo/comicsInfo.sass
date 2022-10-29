@@ -1,0 +1,40 @@
+@import '../../style/variables'
+    
+.comicsInfo
+    margin-top: 50px    
+    display: grid
+    grid-template-columns: 300px auto
+    column-gap: 50px
+    &__img
+            filter: drop-shadow(20px 30px 20px rgba(0, 0, 0, 0.25))
+    &__info
+        display: grid
+        grid-template-rows: 54px 145px 49px 49px 32px
+        &_name
+            font-weight: 700
+            font-size: 22px
+            line-height: 26px
+        &_descr
+            width: 550px
+            font-weight: 400
+            font-size: 18px
+            line-height: 21px
+        &_lang, &_pages
+            font-weight: 400
+            font-size: 18px
+            line-height: 21px
+        &_price
+            font-weight: 700
+            font-size: 24px
+            line-height: 28px
+            color: $main-color
+        &_back
+            font-weight: 700
+            font-size: 18px
+            line-height: 21px
+            cursor: pointer
+            a
+                color: #000000
+        &_header
+            display: grid
+            grid-template-columns: 87% 13%
