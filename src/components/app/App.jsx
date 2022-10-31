@@ -5,23 +5,23 @@ import HeroInfo from "../heroInfo/HeroInfo";
 // import AppBanner from "../appBanner/AppBanner";
 // import ComicsList from "../comicsList/ComicsList";
 // import ComicsInfo from "../comicsInfo/ComicsInfo";
-import visionDecor from '../../img/vision.png';
-import Skeleton from "../skeleton/Skeleton";
+// import Skeleton from "../skeleton/Skeleton";
 
 const App = () => {
     return (
-        <div className="app">
-            <AppHeader />
-            <main>
+        <>
+            <div>
+                <AppHeader />
+            </div>
+            <main className="app_container">
                 <RandomHero />
                 <div>
                     <HeroList />
-                    <Skeleton />
+                    <HeroInfo />
                     {/* <HeroInfo /> */}
                 </div>
-                <img className="vision" src={visionDecor} alt="vision decoration" />
             </main>
-        </div>
+        </>
     )
 }
 
