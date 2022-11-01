@@ -1,46 +1,51 @@
 @import url('https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500&display=swap')
 @import './variables'
-.app 
-    max-width: 1100px
-    margin: 0 auto
-    box-sizing: border-box
+
+*
+    margin: 0
     font-family: "Rubik", sans-serif
+
+.app_container
+    margin: 0 auto
+    max-width: 1100px
 
 ul, li
     list-style: none
 
-.button 
+.button
     position: relative
     width: 101px
     height: 38px
+    border-radius: 10px
     color: #fff
     border: none
     cursor: pointer
     overflow: hidden
-    clip-path: polygon(15% 0, 100% 0, 100% 0, 100% 67%, 85% 100%, 0 100%, 0 100%, 0 35%)
-    font-size: 12px
-    line-height: 16px
-    transition: margin 0.1s
+    text-align: center
+    font-weight: 500
+    transition: all 0.1s
+    a
+        font-weight: 500
     &__main
         background: $main-color
         &:hover
-            margin-top: -3px
+            background: #80000f
+        &:active
+            margin-top: 2px
     &__secondary
         background: $gray
         &:hover
-            margin-top: -3px
+            background: #404040
+        &:active
+            margin-top: 2px
     &__long
         width: 170px
         background: $main-color
-        clip-path: polygon(10% 0, 100% 0, 100% 0, 100% 67%, 90% 100%, 0 100%, 0 100%, 0 35%)
+        border-radius: 10px
         &:hover
-            margin-top: 41px
-.vision
-    position: absolute
-    right: -1px
-    bottom: -585px
-    z-index: -1
-    
+            background: #80000f
+        &:active
+            margin-top: 2px
 .pulse 
     animation: pulse 1s ease-in-out .5s infinite
 

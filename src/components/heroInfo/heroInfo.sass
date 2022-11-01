@@ -1,15 +1,22 @@
 .info
     margin-left: 25px
+    display: inline-block
     width: 425px
     height: 763px
-    display: inline-block
     margin-top: 53px
     box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.25)
+    border-radius: 10px
+    a
+        color: #fff
     &__info 
         display: grid
         grid-template-columns: 150px auto
         column-gap: 20px
         padding: 25px 0 0 25px
+        img
+            width: 150px
+            height: 150px
+            border-radius: 10px
         &_name
             text-transform: uppercase
             font-weight: 700
@@ -20,12 +27,12 @@
             grid-template-rows: 64px 48px 38px
     &__text
         font-weight: 400
-        font-size: 13px
+        font-size: 15px
         line-height: 16px
         width: 375px
         height: 128px
         margin: 0 auto
-        margin-top: 15px
+        margin-top: 25px
     &__subheader
         font-weight: 700
         font-size: 18px
@@ -33,8 +40,12 @@
         margin-left: 25px
     &__comics_list
         ul
+            margin-top: 15px
             padding: 0
+            p 
+                margin-left: 25px
         &_item
+            border-radius: 5px
             font-weight: 400
             font-size: 14px
             line-height: 16px
@@ -43,4 +54,9 @@
             padding: 4px 10px 5px 10px
             margin-bottom: 10px
             margin-left: 15px
-    
+    &__error
+        margin-top: 340px
+    &__spinner
+        margin-top: 350px
+    &__skeleton
+        height: 294px

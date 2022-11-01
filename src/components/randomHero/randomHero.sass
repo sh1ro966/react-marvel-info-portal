@@ -1,19 +1,25 @@
+@import '../../style/variables'
+    
 .random
-    margin-top: 30px
+    border-radius: 10px
+    margin-top: 50px
     display: grid
     grid-template-columns: auto auto
+    box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.25)
     &__item
         width: 550px
         height: 250px
-        box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.25)
     &__try
-        position: relative
         background: #232222
+        z-index: 1
+        position: relative
+        border-radius: 0 10px 10px 0
         &_info
             display: grid
-            padding: 40px 100px 35px 35px
-            grid-template-rows: 90px 44px 38px
+            padding: 40px 35px 35px 40px
+            grid-template-rows: 90px 49px 38px
             &_first, &_second
+                text-align: center
                 color: #fff
                 font-weight: 500
                 font-size: 22px
@@ -21,42 +27,51 @@
                 margin: 0
         img
             position: absolute
-            right: -46px
-            top: 52px
+            width: 150px
+            height: 150px
+            right: 20px
+            top: 95px
     &__hero
         display: grid
         grid-template-columns: 45% 55%
         img   
-            width: 180px
-            height: 180px
+            border-radius: 10px
+            width: 200px
+            height: 200px
             object: cover
+            box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.25)
         &_block
-            padding-top: 35px
-            padding-left: 40px
+            padding-top: 25px
+            padding-left: 25px
             display: grid
             grid-template-columns: 180px auto
             column-gap: 20px
         &_info
             display: grid
-            grid-template-rows: 29px 95px 38px
+            grid-template-rows: 35px 95px 38px
             row-gap: 10px
             padding-top: 32px
             padding-right: 20px
         &_name
             font-weight: bold
-            font-size: 22px
+            font-size: 18px
             text-transform: uppercase
             margin: 0
         &_descr
             font-size: 14px
             line-height: 16px
-            font-weight: 300
+            font-weight: 400
             margin: 0
         &_buttons
             margin-top: 1px
             display: grid
             grid-template-columns: 50% 50%
-
-                    
-
+            a
+                color: #fff
+    button
+        margin: 0 auto
+                      
+.random__spinner
+    display: flex
+    align-items: center
             

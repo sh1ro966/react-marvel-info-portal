@@ -1,28 +1,38 @@
+import { Component } from "react";
+
 import AppHeader from "../appHeader/AppHeader";
 import RandomHero from "../randomHero/RandomHero";
 import HeroList from "../heroList/HeroList";
 import HeroInfo from "../heroInfo/HeroInfo";
-// import AppBanner from "../appBanner/AppBanner";
-// import ComicsList from "../comicsList/ComicsList";
-// import ComicsInfo from "../comicsInfo/ComicsInfo";
-import visionDecor from '../../img/vision.png';
-import Skeleton from "../skeleton/Skeleton";
 
-const App = () => {
-    return (
-        <div className="app">
-            <AppHeader />
-            <main>
-                <RandomHero />
+
+class App extends Component {
+
+    state = {
+        selectedHero: null
+    }
+    
+    onHeroSelected = (id) => {
+        this.setState({
+            selectedHero: id
+        })
+    }
+    render() {
+        return (
+            <>
                 <div>
-                    <HeroList />
-                    <Skeleton />
-                    {/* <HeroInfo /> */}
+                    <AppHeader />
                 </div>
-                <img className="vision" src={visionDecor} alt="vision decoration" />
-            </main>
-        </div>
-    )
+                <main className="app_container">
+                    <RandomHero />
+                    <div>
+                        <HeroList onHeroSelected={this.onHeroSelected} />
+                        <HeroInfo heroId={this.state.selectedHero} />
+                    </div>
+                </main>
+            </>
+        )
+    }
 }
 
 export default App;
