@@ -6,8 +6,6 @@ import ErrorMessage from '../errorMessage/ErrorMessage';
 
 import './randomHero.sass';
 
-// import mjolnirImg from '../../img/mjolnir.png'
-
 class RandomHero extends Component{
     
     state = {

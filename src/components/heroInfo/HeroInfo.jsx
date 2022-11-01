@@ -99,14 +99,7 @@ const RenderHero = ({hero}) => {
             <h3 className="info__subheader">Comics:</h3>
                 <div className="info__comics_list">
                     <ul>
-                        {comics.length > 0 ? null : <p>There is no comicses with this hero</p>}
-                        {
-                            comics.map((item, i) => {
-                                return (
-                                    <li key={i} className="info__comics_list_item">{item.name}</li>
-                                )
-                            }).splice(0,9).concat(<p style={{marginLeft: 20, marginTop: 15}}>and more...</p>)
-                        }
+                    { comics.length > 0 ? comics.map((item, i) => <li key={i} className="info__comics_list_item">{item.name}</li>).slice(0,9).concat(<p key='more' style={{marginLeft: 20}}>and more...</p>) : <p>There is no comicses about this hero</p> }
                     </ul>
             </div>
         </>
