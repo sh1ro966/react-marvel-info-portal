@@ -20,7 +20,6 @@ ul, li
     color: #fff
     border: none
     cursor: pointer
-    overflow: hidden
     text-align: center
     font-weight: 500
     transition: all 0.1s
@@ -56,3 +55,27 @@ ul, li
         opacity: .8
     100% 
         opacity: 1
+
+.pageup
+    position: fixed
+    top: 90%
+    left: 93%
+    display: none
+    transition: margin 0.2s
+    &:hover
+        margin-top: -3px
+    img
+        width: 50px
+        height: 50px
+    &__text
+        position: absolute
+        top: 42px
+        left: 1px
+        font-weight: 600
+        color: $main-color
+        &:hover
+            color: $main-color
+        &::after
+            color: $main-color
+.pageUpBlock
+    display: block

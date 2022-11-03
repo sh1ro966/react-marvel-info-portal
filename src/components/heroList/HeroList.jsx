@@ -11,22 +11,48 @@ class HeroList extends Component {
     state = {
         heroList: [],
         loading: true,
-        error: false
+        loadingRequest: false,
+        error: false,
+        offset: 118
     }
     
     marvelService = new MarvelService(); 
 
     componentDidMount() {
-        this.marvelService.getAllHeroes()
+        this.onRequest();
+    }
+    
+    componentDidUpdate(prevProps, prevState) {
+        if (this.state.offset !== prevState.offset) {
+            this.onRequest(this.state.offset);
+        }
+    }
+
+    onRequest = (offset) => {
+        this.onHeroListLoading();
+        this.marvelService.getAllHeroes(offset)
         .then(this.onAllHeroesLoaded)
         .catch(this.onError);
     }
-
-    onAllHeroesLoaded = (heroList) => {
+    
+    onHeroListLoading = () => {
         this.setState({
-            heroList,
-            loading: false
+            loadingRequest: true
         })
+    }
+
+    onRequestNewOffset = () => { 
+        this.setState(() => ({
+            offset: this.state.offset + 9
+        })) 
+    }
+
+    onAllHeroesLoaded = (newHeroList) => {
+        this.setState(({heroList}) => ({
+            heroList: [...heroList, ...newHeroList],
+            loading: false,
+            loadingRequest: false
+        }))
     } 
 
     onError = () => {
@@ -41,7 +67,7 @@ class HeroList extends Component {
             const errorMsg = error ? <div className="hero__other"><ErrorMessage /></div> : null;
             const spinner = loading ? <div className="hero__other"><Spinner /></div> : null;
             const displayedContent = !(loading || error) ? this.HeroBlock(heroList) : null;
-            const longBtn = <button className="button button__long">LOAD MORE</button>;
+            const longBtn = <button className="button button__long" disabled={this.state.loadingRequest} onClick={this.onRequestNewOffset}>LOAD MORE</button>;
         return(
             <div className="hero">
                     {errorMsg}
@@ -62,7 +88,7 @@ class HeroList extends Component {
                 key={item.id}
                 onClick={() => this.props.onHeroSelected(item.id)}>
                     <img src={item.thumbnail} alt={item.name} />
-                    <p>{item.name}</p>
+                    <p>{item.name.length > 24 ? `${item.name.slice(0, 22)}...` : item.name}</p>
                 </li>
             )
         })

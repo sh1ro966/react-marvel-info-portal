@@ -1,4 +1,5 @@
 import { Component } from 'react';
+import PropTypes from 'prop-types';
 
 import MarvelService from '../../services/MarvelService';
 import ErrorMessage from '../errorMessage/ErrorMessage';
@@ -99,11 +100,15 @@ const RenderHero = ({hero}) => {
             <h3 className="info__subheader">Comics:</h3>
                 <div className="info__comics_list">
                     <ul>
-                    { comics.length > 0 ? comics.map((item, i) => <li key={i} className="info__comics_list_item">{item.name}</li>).slice(0,9).concat(<p key='more' style={{marginLeft: 20}}>and more...</p>) : <p>There is no comicses about this hero</p> }
+                    { comics.length > 0 ? comics.map((item, i) => <li key={i} className="info__comics_list_item">{item.name}</li>).slice(0,9) : <p>There is no comicses about this hero</p> }
                     </ul>
             </div>
         </>
     )
+}
+
+HeroInfo.propTypes = {
+    heroId: PropTypes.number
 }
 
 export default HeroInfo;
