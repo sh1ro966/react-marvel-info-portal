@@ -15,11 +15,17 @@ class App extends Component {
     }
 
     componentDidMount() {
-        window.addEventListener('scroll', () => {
-            this.setState(() => ({
-                scrollPosition: window.scrollY
-            }))
-        })
+        window.addEventListener('scroll', this.changeScroll);
+    }
+
+    changeScroll = () => {
+        this.setState(() => ({
+            scrollPosition: window.scrollY
+        }))
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener('scroll', this.changeScroll)
     }
     
     onHeroSelected = (id) => {
