@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import {useState, useEffect, useRef} from 'react';
 
 import MarvelService from '../../services/MarvelService';
 import ErrorMessage from '../errorMessage/ErrorMessage';
@@ -7,127 +7,97 @@ import FindHero from '../findHero/FindHero';
 
 import './heroList.sass';
 
-class HeroList extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            heroList: [],
-            searchHeroList: [],
-            loading: true,
-            loadingRequest: false,
-            error: false,
-            offset: 1,
-            term: ''
-        }
+const HeroList = (props) => {
+
+    const [heroList, setHeroList] = useState([]);
+    const [searchHeroList, setSearchHeroList] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [loadingRequest, setLoadingRequest] = useState(false);
+    const [error, setError] = useState(false);
+    const [offset, setOffset] = useState(1);
+    const [term, setTerm] = useState('');
+
+    const marvelService = new MarvelService(); 
+
+    useEffect(() => {
+        onRequest(offset);
+    }, [offset]);
+    
+    useEffect(() => {
+        onSearchHero(term)
+    }, [term]);
+
+    const onRequest = (offset) => {
+        onHeroListLoading();
+        marvelService.getAllHeroes(offset)
+        .then(onAllHeroesLoaded)
+        .catch(onError);
     }
     
-    marvelService = new MarvelService(); 
-
-    componentDidMount() {
-        this.onRequest();
-    }
-    
-    componentDidUpdate(prevProps, prevState) {
-        if (this.state.offset !== prevState.offset) {
-            this.onRequest(this.state.offset);
-        }
-        if (this.state.term !== prevState.term) {
-            this.onSearchHero(this.state.term);
-        } 
+    const onHeroListLoading = () => {
+        setLoadingRequest(true);
     }
 
-    onRequest = (offset) => {
-        this.onHeroListLoading();
-        this.marvelService.getAllHeroes(offset)
-        .then(this.onAllHeroesLoaded)
-        .catch(this.onError);
-    }
-    
-    onHeroListLoading = () => {
-        this.setState({
-            loadingRequest: true
-        })
+    const onRequestNewOffset = () => { 
+        setOffset(offset => offset + 9);
     }
 
-    onRequestNewOffset = () => { 
-        this.setState(() => ({
-            offset: this.state.offset + 9
-        })) 
-    }
-
-    onAllHeroesLoaded = (newHeroList) => {
-        this.setState(({heroList}) => ({
-            heroList: [...heroList, ...newHeroList],
-            loading: false,
-            loadingRequest: false
-        }))
+    const onAllHeroesLoaded = (newHeroList) => {
+        setHeroList([...heroList, ...newHeroList]);
+        setLoading(false);
+        setLoadingRequest(false);
     } 
 
-    onSearchHeroes = (searchHeroList) => {
-        this.setState(() => ({
-            searchHeroList: searchHeroList,
-            loading: false
-        }))
+
+    const onSearchHeroes = (searchHeroList) => {
+        setSearchHeroList(searchHeroList);
+        setLoading(false);
     }
 
-    onSearchHeroLoading = () => {
-        this.setState(() => ({
-            loading: true
-        }))
+    const onSearchHeroLoading = () => {
+        setLoading(true);
     }
 
-    onSearchHero = (term) => {
+    const onSearchHero = (term) => {
         if (term) {
-        this.onSearchHeroLoading();
-        this.marvelService.getFindHero(term)
-        .then(this.onSearchHeroes)
-        .catch(this.onError);
+        onSearchHeroLoading();
+        marvelService.getFindHero(term)
+        .then(onSearchHeroes)
+        .catch(onError);
         }
         else {
-            this.setState(() => ({
-                searchHeroList: []
-            }))
+            setSearchHeroList([]);
         }
-        
     }
 
-    onSearch = (term) => {
-        this.setState(() => ({
-            term: term
-        }))
+    const onSearch = (term) => {
+        setTerm(term);
       }
 
-    onError = (err) => {
-        this.setState({
-            error: true,
-            loading: false
-        })
-        console.log(err);
+    const onError = () => {
+        setError(true);
+        setLoading(false);
     }
 
-    itemRef = [];
+    const itemRef = useRef([]);
 
-    setRef = (ref) => {
-        this.itemRef.push(ref);
-    }
-
-    focusOnItem = (id) => {
-        this.itemRef.forEach(item => item.classList.remove('hero__item_active'));
-        this.itemRef[id].classList.add('hero__item_active');
-        this.itemRef[id].focus();
+    const focusOnItem = (id) => {
+        itemRef.current.forEach(item => item.classList.remove('hero__item_active'));
+        itemRef.current[id].classList.add('hero__item_active');
+        itemRef.current[id].focus();
     }
  
-    HeroBlock(arr) {
+    function HeroBlock(arr) {
             const itemsSearch = arr.map((item, i) => {
                 return (
                     <li
                     tabIndex={0}
-                    ref={this.setRef}
+                    ref={el => itemRef.current[i] = el}
                     className="hero__item"
                     key={item.id}
                     onClick={() => {
-                        this.props.onHeroSelected(item.id);
-                        this.focusOnItem(i);
+                        props.onHeroSelected(item.id);
+                        focusOnItem(i);
                     }}>
                         <img src={item.thumbnail} alt={item.name} />
                         <p>{item.name.length > 24 ? `${item.name.slice(0, 22)}...` : item.name}</p>
@@ -140,41 +110,36 @@ class HeroList extends Component {
                 </ul>
             )
     }
-
-    render() {
-        
-        const {heroList, searchHeroList, loading, error, term} = this.state;
             const errorMsg = error ? <div className="hero__other"><ErrorMessage /></div> : null;
             const spinner = loading ? <div className="hero__other"><Spinner /></div> : null;
+            const longBtn = <button className="button button__long" disabled={loadingRequest} onClick={onRequestNewOffset}>LOAD MORE</button>;
             const displayedContent = () => {
                if (term.length === 0) {
-                return this.HeroBlock(heroList);
+                return HeroBlock(heroList);
                 }
                  else {
                     if (term.length > 1 && searchHeroList.length === 0) {
-                        return <h2 style={{position: 'absolute', top: 450, left: 500}}>There is no such hero as - <span style={{color: '#9F0013'}}>'{term.slice(0, 20)}'</span></h2>
+                        return <h2 style={{position: 'absolute', top: 450, left: 320}}>There is no such hero as - <span style={{color: '#9F0013'}}>'{term.slice(0, 15)}'</span></h2>
                     }
                     else if (!loading && !error) {
-                        return this.HeroBlock(searchHeroList);
+                        return HeroBlock(searchHeroList);
                     }
                     
                  }
             }
-            const longBtn = <button className="button button__long" disabled={this.state.loadingRequest} onClick={this.onRequestNewOffset}>LOAD MORE</button>;
         return(  
             <>
-            <FindHero onSearch={this.onSearch} />
+            <FindHero onSearch={onSearch} />
             <div className="hero">
                     {errorMsg}
                     {spinner}
                     {displayedContent()} 
                 <div className="hero__button">
-                       {(!loading && !term) ? longBtn : null}
+                       {!loading && !term ? longBtn : null}
                 </div>
             </div>
             </>
         )
-    }     
 }
 
 export default HeroList;

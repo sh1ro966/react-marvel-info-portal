@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import {useState, useEffect} from 'react';
 
 import MarvelService from '../../services/MarvelService';
 import Spinner from '../spinner/Spinner';
@@ -6,59 +6,45 @@ import ErrorMessage from '../errorMessage/ErrorMessage';
 
 import './randomHero.sass';
 
-class RandomHero extends Component{
+const RandomHero = () => {
     
-    state = {
-        hero: {},
-        loading: true,
-        error: false
+    const [hero, setHero] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(false);
+
+    const marvelService = new MarvelService(); 
+
+    useEffect(() => {
+        updateHero();
+    }, []);
+
+    const onHeroLoaded = (hero) => {
+        setHero(hero)
+        setLoading(false);
     }
 
-    marvelService = new MarvelService(); 
-
-    componentDidMount() {
-        this.updateHero();
-    }
-
-    onHeroLoaded = (hero) => {
-        this.setState(() => ({
-            hero,
-            loading: false
-        }))
-    }
-
-    updateHero = () => {
+    const updateHero = () => {
             const id = Math.floor(Math.random() * (1011400 - 1011000) + 1011000);
-            this.updateHeroLoading();
-            this.marvelService
+            updateHeroLoading();
+            marvelService
             .getHero(id)
-            .then(this.onHeroLoaded)
-            .catch(this.onError);
+            .then(onHeroLoaded)
+            .catch(onError);
     }
 
-    updateHeroLoading = () => {
-        this.setState({
-            error: false,
-            loading: true
-        })
+    const updateHeroLoading = () => {
+        setError(false);
+        setLoading(true);
     }
 
-    updateHeroBtn = () => {
-        this.componentDidMount();
+    const onError = () => {
+        setLoading(false);
+        setError(true);
     }
 
-    onError = () => {
-        this.setState({
-            loading: false,
-            error: true
-            })
-    }
-
-    render() {
-        const {hero, loading, error} = this.state;
-        const errorMsg = error ? <ErrorMessage /> : null;
-        const spinner = loading ? <Spinner /> : null;
-        const displayedContent = !(loading || error) ? <RandomHeroBlock hero={hero} /> : null;
+    const errorMsg = error ? <ErrorMessage /> : null;
+    const spinner = loading ? <Spinner /> : null;
+    const displayedContent = !(loading || error) ? <RandomHeroBlock hero={hero} /> : null;
 
         let heroClass = "random__item"
         if (!loading && !error) {
@@ -79,12 +65,11 @@ class RandomHero extends Component{
                         <h3 className="random__try_info_first">Random hero for today!<br></br>
                         Do you want to know him better?</h3>
                         <h3 className="random__try_info_second">Or choose another one</h3>
-                        <button className="button button__main" onClick={this.updateHeroBtn}>TRY IT</button>
+                        <button className="button button__main" onClick={updateHero}>TRY IT</button>
                     </div>
                 </div>
             </div>
         )
-    }
 }
 
 const RandomHeroBlock = ({hero}) => {
@@ -103,7 +88,7 @@ const RandomHeroBlock = ({hero}) => {
                             <button className="button button__secondary"><a href={wiki}>WIKI</a></button>
                     </div>
              </div>
-             </>
+        </>
     )
 }
 

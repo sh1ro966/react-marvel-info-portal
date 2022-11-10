@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import {useState, useEffect} from 'react';
 import PropTypes from 'prop-types';
 
 import MarvelService from '../../services/MarvelService';
@@ -8,60 +8,43 @@ import Skeleton from '../skeleton/Skeleton';
 
 import './heroInfo.sass';
 
-class HeroInfo extends Component {
+const HeroInfo = (props) => {
+    const [hero, setHero] = useState(null);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(false);
 
-    state = {
-        hero: null,
-        loading: false,
-        error: false
-    }
+    const marvelService = new MarvelService(); 
 
-    marvelService = new MarvelService(); 
+    useEffect(() => {
+        updateHero();
+    }, [props.heroId])
 
-    componentDidMount() {
-        this.updateHero();
-    }
-
-    componentDidUpdate(prevProps){
-        if (this.props.heroId !== prevProps.heroId) {
-            this.updateHero();
-        }
-    }
-
-    updateHero = () => {
-        const {heroId} = this.props;
+    const updateHero = () => {
+        const {heroId} = props;
         if (!heroId) {
             return;
         }
-        this.updateHeroLoading();
-        this.marvelService.getHero(heroId)
-        .then(this.onHeroLoaded)
-        .catch(this.onError);
+        updateHeroLoading();
+        marvelService.getHero(heroId)
+        .then(onHeroLoaded)
+        .catch(onError);
     }
 
-    updateHeroLoading = () => {
-        this.setState({
-            error: false,
-            loading: true
-        })
+    const updateHeroLoading = () => {
+        setError(false);
+        setLoading(true);
     }
 
-    onHeroLoaded = (hero) => {
-        this.setState({
-            hero,
-            loading: false
-        })
+    const onHeroLoaded = (hero) => {
+        setHero(hero);
+        setLoading(false);
     }
 
-    onError = () => {
-        this.setState({
-            loading: false,
-            error: true
-        })
+    const onError = () => {
+        setLoading(false);
+        setError(true);
     }
 
-   render() {
-        const {hero, loading, error} = this.state;
         let infoClass = '';
         if (!hero && !loading && !error) {
             infoClass += '';
@@ -81,7 +64,6 @@ class HeroInfo extends Component {
             {displayedContent}
         </div>
     )
-   }
 }
 
 const RenderHero = ({hero}) => {

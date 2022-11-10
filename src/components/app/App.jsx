@@ -1,4 +1,4 @@
-import { Component } from "react";
+import {useState, useEffect} from "react";
 
 import AppHeader from "../appHeader/AppHeader";
 import RandomHero from "../randomHero/RandomHero";
@@ -7,38 +7,32 @@ import HeroInfo from "../heroInfo/HeroInfo";
 import ErrorBoundary from "../errorBoundary/ErrorBoundary";
 
 
-class App extends Component {
+const App = () => {
 
-    state = {
-        selectedHero: null,
-        scrollPosition: 0
-    }
+    const [selectedHero, setSelectedHero] = useState(null);
+    const [scrollPosition, setScrollPosition] = useState(0);
 
-    componentDidMount() {
-        window.addEventListener('scroll', this.changeScroll);
-    }
+    function setScroll() {
+        setScrollPosition(window.pageYOffset);
+      }
 
-    changeScroll = () => {
-        this.setState(() => ({
-            scrollPosition: window.scrollY
-        }))
-    }
+    useEffect(() => {
+        window.addEventListener('scroll', setScroll);
 
-    componentWillUnmount() {
-        window.removeEventListener('scroll', this.changeScroll)
-    }
-    
-    onHeroSelected = (id) => {
-        this.setState({
-            selectedHero: id
-        })
+        return () => {
+            window.removeEventListener('scroll', setScroll)
+        }
+    }, []);
+
+    const onHeroSelected = (id) => {
+        setSelectedHero(id);
     }  
 
-    render() {
-        let pageUpClass = "pageup"
-        if (this.state.scrollPosition > 1267) {
-            pageUpClass += ' pageUpBlock'
-        }
+
+let pageUpClass = "pageup"
+if (scrollPosition > 1267) {
+    pageUpClass += ' pageUpBlock'
+}
         return (
             <>
                 <div id="up">
@@ -50,10 +44,10 @@ class App extends Component {
                     </ErrorBoundary>
                     <div>
                         <ErrorBoundary>
-                            <HeroList onHeroSelected={this.onHeroSelected} />
+                            <HeroList onHeroSelected={onHeroSelected} />
                         </ErrorBoundary>
                             <ErrorBoundary>
-                                <HeroInfo heroId={this.state.selectedHero} />
+                                <HeroInfo heroId={selectedHero} />
                             </ErrorBoundary>
                     </div>
                 </main>
@@ -64,6 +58,6 @@ class App extends Component {
             </>
         )
     }
-}
+
 
 export default App;
