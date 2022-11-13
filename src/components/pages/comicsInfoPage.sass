@@ -6,7 +6,18 @@
     grid-template-columns: 300px auto
     column-gap: 50px
     &__img
-            filter: drop-shadow(20px 30px 20px rgba(0, 0, 0, 0.25))
+        filter: drop-shadow(20px 30px 20px rgba(0, 0, 0, 0.25))
+        img
+            width: 293px
+            height: 450px
+    &__spinner
+        margin: 0 auto
+        padding-top: 200px
+        height: 600px
+    &__error
+        text-align: center
+        padding-top: 200px
+        height: 600px
     &__info
         display: grid
         grid-template-rows: 54px 145px 49px 49px 32px
@@ -29,12 +40,17 @@
             line-height: 28px
             color: $main-color
         &_back
-            font-weight: 700
+            padding-top: 10px
+            width: 100px
+            height: 30px
+            background-color: $main-color
+            border-radius: 10px
+        &_backText
+            padding: 5px
+            font-weight: 500
             font-size: 18px
             line-height: 21px
-            cursor: pointer
-            a
-                color: #000000
+            color: #fff
         &_header
             display: grid
             grid-template-columns: 87% 13%

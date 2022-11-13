@@ -1,28 +1,22 @@
-import { Component } from 'react';
+import { useState } from 'react';
 
 import './findHero.sass';
 
-class FindHero extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            term: ''
-        }
-    }
+const FindHero = (props) =>  {
+
+    const [term, setTerm] = useState('');
     
-    onSearch = (e) => {
+    const onSearch = (e) => {
         const term = e.target.value;
-        this.setState({term});
-        this.props.onSearch(term); 
+        setTerm(term);
+        props.onSearch(term);
     }
 
-    render() {
         return (
             <div className="find">
-                <input onChange={this.onSearch} value={this.state.term} type="text" className="find__input" placeholder='Search hero' />
+                <input onChange={onSearch} value={term} type="text" className="find__input" placeholder='Search hero' />
             </div>
         )
-    }
 }
 
 export default FindHero;

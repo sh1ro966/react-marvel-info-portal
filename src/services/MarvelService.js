@@ -6,7 +6,7 @@ const useMarvelService = () => {
     const _apiBase = 'https://gateway.marvel.com:443/v1/public/';
     const _apiKey = 'apikey=4161340913469e8982dcbcecee20f153';
     const _baseHeroOffset = 1;
-    const _baseComicsOffset = 221;
+    const _baseComicsOffset = 1;
 
     const getAllHeroes = async (offset = _baseHeroOffset) => {
       const res = await request(`${_apiBase}/characters?limit=9&offset=${offset}&${_apiKey}`);
@@ -25,6 +25,16 @@ const useMarvelService = () => {
 
     const getAllComicses = async (offset = _baseComicsOffset) => {
       const res = await request(`${_apiBase}/comics?limit=8&offset=${offset}&${_apiKey}`);
+      return res.data.results.map(_transformComics);
+    }
+
+    const getComics = async (comicsId) => {
+      const res = await request(`${_apiBase}/comics/${comicsId}?${_apiKey}`);
+      return _transformComics(res.data.results[0]);
+    }
+
+    const getFindComics = async (term) => {
+      const res = await request(`${_apiBase}/comics?limit=8&titleStartsWith=${term}&${_apiKey}`)
       return res.data.results.map(_transformComics);
     }
 
@@ -51,11 +61,14 @@ const useMarvelService = () => {
             id: comics.id,
             title: comics.title,
             price: comics.prices[0].price,
-            thumbnail: `${comics.thumbnail.path}.${comics.thumbnail.extension}`
+            description: comics.description || 'There is no description for this comic',
+            thumbnail: `${comics.thumbnail.path}.${comics.thumbnail.extension}`,
+            pageNumber: comics.pageCount ? `${comics.pageCount} pages` : 'No information about the number of pages',
+            language: comics.textObjects.language || 'en-us'
         }
     }
 
-    return {loading, error, getAllHeroes, getHero, getFindHero, clearError, getAllComicses, onAllItemsLoaded};
+    return {loading, error, getAllHeroes, getHero, getFindHero, clearError, getAllComicses, getComics, getFindComics, onAllItemsLoaded};
 }
 
 export default useMarvelService;
